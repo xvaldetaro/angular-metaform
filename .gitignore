@@ -1,0 +1,11 @@
+.DS_Store
+.nodemonignore
+.sass-cache/
+npm-debug.log
+node_modules/
+bower_components/
+example/node_modules
+example/app/bower_components
+.grunt/
+.bower-*/
+.idea/

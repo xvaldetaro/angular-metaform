@@ -1,0 +1,9 @@
+{
+  "name": "sample",
+  "version": "0.0.1",
+  "description": "Sample angular sample",
+  "dependencies": {
+    "bootstrap": "~3",
+    "angular": ">1.2.6"
+  }
+}

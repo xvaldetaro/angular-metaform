@@ -1,0 +1,30 @@
+{
+  "name": "sample",
+  "version": "0.0.0",
+  "description": "Base Angularjs sample app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Alexandre",
+  "license": "MIT",
+  "dependencies": {
+    "express": "~4.2.0",
+    "body-parser": "~1.2.0",
+    "q": "*",
+    "lodash": "~2.4.1",
+    "bower": "~1.3.1",
+    "grunt-cli": "~0.1.13"
+  },
+  "devDependencies": {
+    "grunt-node-inspector": "~0.1.3",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-csslint": "^0.2.0",
+    "grunt-angular-templates": "*",
+    "grunt-nodemon": "~0.2.1",
+    "grunt-concurrent": "~0.5.0",
+    "load-grunt-tasks": "~0.4.0"
+  }
+}

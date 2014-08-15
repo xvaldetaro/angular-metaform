@@ -1,0 +1,37 @@
+{
+  "name": "angular-form-generator",
+  "version": "0.0.0",
+  "description": "Bootstrap form generated based on JSON with customizable templates and layout.",
+  "main": "form-generator.js",
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xvaldetaro/angular-metaform.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "form",
+    "dynamic",
+    "json",
+    "meta",
+    "generate",
+    "forms",
+    "bootstrap",
+    "layout"
+  ],
+  "author": "Alexandre Valdetaro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xvaldetaro/angular-metaform/issues"
+  },
+  "homepage": "https://github.com/xvaldetaro/angular-metaform",
+  "devDependencies": {
+    "grunt": "*",
+    "load-grunt-tasks": "~0.4.0",
+    "grunt-contrib-copy": "*",
+    "grunt-gh-pages": "*"
+  }
+}

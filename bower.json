@@ -1,0 +1,33 @@
+{
+  "name": "angular-metaform",
+  "authors": ["Alexandre Valdetaro","xvaldetaro.com"],
+  "description": "Form generation for angular based on JSON. Supports customizable templates and layout.",
+  "main": [
+    "dist/metaform.js"
+  ],
+  "ignore": [
+    "examples"
+  ],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "form",
+    "dynamic",
+    "json",
+    "meta",
+    "generate",
+    "forms",
+    "bootstrap",
+    "layout"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3",
+    "angular": ">1.2.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xvaldetaro/angular-metaform.git"
+  },
+  "homepage": "http://xvaldetaro.github.io/angular-metaform"
+}
