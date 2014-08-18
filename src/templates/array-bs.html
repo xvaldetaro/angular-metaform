@@ -1,4 +1,4 @@
-<div class="panel panel-default" ng-init="collapse = false">
+<div class="panel panel-default" ng-init="collapse = true">
 	<div class="panel-heading" ng-click="collapse = !collapse" style="cursor: pointer;">
 		<h3 class="panel-title"><a>{{field.label}}</a></h3>
 	</div>
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="(key, item) in model.model">{{item | json}}>
+			<li class="list-group-item" ng-repeat="(key, item) in model.model">{{item | json}}
 				<button class="btn btn-danger" type="button" ng-click="remove(key)">
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>

@@ -5,9 +5,9 @@ var getDefault = function(field) {
 
 	if(field.nested === 'object') return {};
 	if(field.nested) return [];
-	if(field.type == 'text') return '';
-	if(field.type == 'bool') return false;
-	if(field.type == 'enum') return field.choices[0];
+	if(field.type === 'text') return '';
+	if(field.type === 'bool') return false;
+	if(field.type === 'enum') return field.choices[0];
 };
 
 angular.module('xvMetaform', [])
@@ -113,11 +113,11 @@ angular.module('xvMetaform', [])
 
 				properElement.empty();
 				var nestedElement;
+				var innerElement;
 				if(field.nested && field.nested !== 'object') {
 					fieldScope.newModel = {};
 
 					nestedElement = angular.element($templateCache.get('array-bs.xv'));
-					var innerElement;
 
 					if(field.nested === 'array') {
 						fieldScope.newField = angular.extend({}, field);
@@ -153,7 +153,7 @@ angular.module('xvMetaform', [])
 
 					nestedElement = angular.element($templateCache.get('object-bs.xv'));
 
-					var innerElement = angular.element('<div></div>');
+					innerElement = angular.element('<div></div>');
 					nestedElement.find('xvnew').replaceWith(innerElement);
 
 					innerElement.attr('xv-metaform', 'field.type');
