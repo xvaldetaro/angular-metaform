@@ -16,7 +16,7 @@
 
 		<div class="list-group" style="max-height: 170px; overflow-y:scroll; border-top: solid 1px #dddddd; border-bottom: solid 1px #dddddd; border-radius: 3px;">
 
-			<a class="list-group-item" ng-repeat="item in field.list | filter:searchText" ng-click="xvSelect(item)" ng-class="{active: item == xvSelected}">{{item[field.display]}}</a>
+			<a class="list-group-item" ng-repeat="item in field.list | filter:searchText" ng-click="model.model = item" ng-class="{active: item === model.model}">{{item[field.display]}}</a>
 
 		</div>
 	</div>
