@@ -3,6 +3,7 @@
 var getDefault = function(field) {
 	if(field.defaultModel) return field.defaultModel;
 
+	if(field.array) return [];
 	if(field.type == 'text') return '';
 	if(field.type == 'bool') return false;
 	if(field.type == 'enum') return field.choices[0];
@@ -63,13 +64,11 @@ angular.module('xvMetaform', [])
 
 				for(var i = 0; i < fields.length; i++) {
 					var field = fields[i];
-					var directiveType = 'field';
 
 					if(typeof(field) !== 'object' || !field.id || !field.type)
 						throw new Error('xvMetaform fields must be objects with ids and types');
 
 					if(field.array) {
-						directiveType = 'array';
 						field.arrayTemplatePrefix = 'array';
 					} 
 
@@ -82,7 +81,7 @@ angular.module('xvMetaform', [])
 					// Appends a new container element with the directive associated
 					element.append(
 						angular.element('<div></div>')
-						.attr('xv-'+directiveType, 'fields['+i+']')
+						.attr('xv-field', 'fields['+i+']')
 						.attr('xv-metaform-model', 'model')
 					);
 				}
@@ -107,8 +106,39 @@ angular.module('xvMetaform', [])
 				fieldWatch.resolve(field);
 
 				element.empty();
+				var newElement;
+				if(field.array) {
+					fieldScope.newModel = {};
 
-				var newElement = angular.element($templateCache.get(field.templatePrefix+'-bs.xv'));
+					newElement = angular.element($templateCache.get(field.arrayTemplatePrefix+'-bs.xv'));
+					var addElement = angular.element('<div></div>');
+					newElement.find('xvnew').replaceWith(addElement);
+					addElement.attr('xv-metaform-model', 'newModel');
+
+					if(field.array === true) {
+						fieldScope.newField = angular.extend({}, field);
+						fieldScope.newField.array = false;
+						fieldScope.newField.label = 'Add new '+fieldScope.newField.label;
+
+						fieldScope.add = function() {
+							fieldScope.model.model.push(fieldScope.newModel[field.id]);
+							fieldScope.newModel = {};
+						};
+
+						addElement.attr('xv-field', 'newField');
+					} else if(field.array === 'object') {
+						fieldScope.add = function() {
+							fieldScope.model.model.push(fieldScope.newModel);
+							fieldScope.newModel = {};
+						};
+
+						addElement.attr('xv-metaform', 'field.type');
+					}
+
+				} else {
+					newElement = angular.element($templateCache.get(field.templatePrefix+'-bs.xv'));
+				}
+
 				element.replaceWith(newElement);
 				$compile(newElement)(fieldScope);
 			});
@@ -136,78 +166,6 @@ angular.module('xvMetaform', [])
 					scope[attrs.xvMetaformModel][field.id] = fieldModel;
 				});
 			});
-		}
-	};
-}])
-.directive('xvArray', ['$compile','$templateCache', '$q', function($compile, $templateCache, $q) {
-	return {
-		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			var arrayScope;
-
-			var fieldWatch = $q.defer();
-			scope.$watchCollection(attrs.xvArray, function(field) {
-				if(arrayScope) arrayScope.$destroy();
-
-				arrayScope = scope.$new();
-				arrayScope.field = field;
-				arrayScope.model = {};
-				arrayScope.newModel = {};
-
-				fieldWatch.resolve(field);
-
-				var addElement = angular.element('<div></div>');
-
-				if(field.array === true) {
-					addElement.attr('xv-field', 'field');
-					addElement.attr('xv-metaform-model', 'newModel');
-
-					arrayScope.add = function() {
-						arrayScope.model.model.push(arrayScope.newModel[field.id]);
-						arrayScope.newModel = {};
-					};
-				} else if(field.array === 'object') {
-					arrayScope.newModel[field.id] = {};
-					arrayScope.newForm = field.type;
-					addElement.attr('xv-metaform', 'newForm');
-					addElement.attr('xv-metaform-model', 'newModel');
-
-					arrayScope.add = function() {
-						arrayScope.items.push(angular.extend({}, arrayScope.newModel));
-						for(var key in arrayScope.newModel) delete arrayScope.newModel[key];
-					};
-				}
-
-				element.empty();
-
-				var newElement = angular.element($templateCache.get(field.arrayTemplatePrefix+'-bs.xv'));
-				newElement.find('xvnew').replaceWith(addElement);
-				element.replaceWith(newElement);
-				$compile(newElement)(arrayScope);
-			});
-
-			var modelWatch = $q.defer();
-			fieldWatch.promise.then(function(field){
-				scope.$watch(attrs.xvMetaformModel, function(model) {
-					if(!model[field.id])
-						model[field.id] = [];
-
-					modelWatch.resolve(field);
-				});
-			});
-
-			var modelFieldWatch = $q.defer();
-			modelWatch.promise.then(function(field) {
-				scope.$watch(attrs.xvMetaformModel+'[\''+field.id+'\']', function(modelField) {
-					arrayScope.model.model = modelField;
-					modelFieldWatch.resolve(field);
-				});
-			});
-
-			modelFieldWatch.promise.then(function(field) {
-				arrayScope.$watch('model.model', function(fieldModel) {
-					scope[attrs.xvMetaformModel][field.id] = fieldModel;
-				});
-			})
 		}
 	};
 }]);
