@@ -11,7 +11,11 @@
 			</div>
 		</div>
 		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="item in model.model">{{item | json}}</li>
+			<li class="list-group-item" ng-repeat="(key, item) in model.model">{{item | json}}>
+				<button class="btn btn-danger" type="button" ng-click="remove(key)">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</li>
 		</ul>
 	</div>
 </div>

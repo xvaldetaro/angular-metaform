@@ -142,6 +142,10 @@ angular.module('xvMetaform', [])
 							'xv-metaform-model="newModel"></div>');
 					}
 
+					fieldScope.remove = function(key) {
+						fieldScope.model.model.splice(key, 1);
+					};
+
 					nestedElement.find('xvnew').replaceWith(innerElement);
 
 				} else if(field.nested === 'object') {
