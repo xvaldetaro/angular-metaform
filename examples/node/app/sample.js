@@ -28,19 +28,19 @@ function($scope) {
 			array: true,
 			type: 'text'
 		}
-		//,{
-		// 	id: 'Feats',
-		// 	array: true,
-		// 	type: 'ref',
-		// 	display: 'name',
-		// 	list: [
-		// 		{ _id: '1', name: 'Jose'},
-		// 		{ _id: '2', name: 'Alex'},
-		// 		{ _id: '3', name: 'Aegon'},
-		// 		{ _id: '4', name: 'Jurema'},
-		// 		{ _id: '5', name: 'Pele'}
-		// 	] 
-		// },
+		,{
+			id: 'Feats',
+			array: true,
+			type: 'ref',
+			display: 'name',
+			list: [
+				{ _id: '1', name: 'Jose'},
+				{ _id: '2', name: 'Alex'},
+				{ _id: '3', name: 'Aegon'},
+				{ _id: '4', name: 'Jurema'},
+				{ _id: '5', name: 'Pele'}
+			] 
+		}
 		// {
 		// 	id: 'Items',
 		// 	array: 'object',
@@ -51,10 +51,10 @@ function($scope) {
 		// }
 	];
 	$scope.newModel = function() {
-		$scope.modelGrid = {};
+		$scope.model = {};
 	};
 	$scope.newName = function() {
-		$scope.modelGrid.Name = 'newname';
+		$scope.model.Feats = [];
 	};
 	$scope.grid1 = [
 		[ // row 1

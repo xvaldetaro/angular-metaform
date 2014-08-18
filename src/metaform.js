@@ -139,44 +139,41 @@ angular.module('xvMetaform', [])
 		}
 	};
 }])
-.directive('xvArray', ['$compile','$templateCache', function($compile, $templateCache) {
+.directive('xvArray', ['$compile','$templateCache', '$q', function($compile, $templateCache, $q) {
 	return {
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			var childrenScope;
-			var model = scope.$eval(attrs.xvMetaformModel);
+			var arrayScope;
 
+			var fieldWatch = $q.defer();
 			scope.$watchCollection(attrs.xvArray, function(field) {
-				if(childrenScope) childrenScope.$destroy();
+				if(arrayScope) arrayScope.$destroy();
 
-				childrenScope = scope.$new();
-				childrenScope.field = field;
-				childrenScope.model = scope.$eval(attrs.xvMetaformModel);
-				if(!childrenScope.model[field.id])
-					childrenScope.model[field.id] = [];
+				arrayScope = scope.$new();
+				arrayScope.field = field;
+				arrayScope.model = {};
+				arrayScope.newModel = {};
 
-				childrenScope.items = childrenScope.model[field.id];
-				childrenScope.newModel = {};
+				fieldWatch.resolve(field);
 
 				var addElement = angular.element('<div></div>');
 
 				if(field.array === true) {
-					childrenScope.newField = angular.extend({}, field);
-					addElement.attr('xv-field', 'newField');
+					addElement.attr('xv-field', 'field');
 					addElement.attr('xv-metaform-model', 'newModel');
 
-					childrenScope.add = function() {
-						childrenScope.items.push(childrenScope.newModel[field.id]);
-						childrenScope.newModel = {};
+					arrayScope.add = function() {
+						arrayScope.model.model.push(arrayScope.newModel[field.id]);
+						arrayScope.newModel = {};
 					};
 				} else if(field.array === 'object') {
-					childrenScope.newModel[field.id] = {};
-					childrenScope.newForm = field.type;
+					arrayScope.newModel[field.id] = {};
+					arrayScope.newForm = field.type;
 					addElement.attr('xv-metaform', 'newForm');
 					addElement.attr('xv-metaform-model', 'newModel');
 
-					childrenScope.add = function() {
-						childrenScope.items.push(angular.extend({}, childrenScope.newModel));
-						for(var key in childrenScope.newModel) delete childrenScope.newModel[key];
+					arrayScope.add = function() {
+						arrayScope.items.push(angular.extend({}, arrayScope.newModel));
+						for(var key in arrayScope.newModel) delete arrayScope.newModel[key];
 					};
 				}
 
@@ -185,8 +182,32 @@ angular.module('xvMetaform', [])
 				var newElement = angular.element($templateCache.get(field.arrayTemplatePrefix+'-bs.xv'));
 				newElement.find('xvnew').replaceWith(addElement);
 				element.replaceWith(newElement);
-				$compile(newElement)(childrenScope);
+				$compile(newElement)(arrayScope);
 			});
+
+			var modelWatch = $q.defer();
+			fieldWatch.promise.then(function(field){
+				scope.$watch(attrs.xvMetaformModel, function(model) {
+					if(!model[field.id])
+						model[field.id] = [];
+
+					modelWatch.resolve(field);
+				});
+			});
+
+			var modelFieldWatch = $q.defer();
+			modelWatch.promise.then(function(field) {
+				scope.$watch(attrs.xvMetaformModel+'[\''+field.id+'\']', function(modelField) {
+					arrayScope.model.model = modelField;
+					modelFieldWatch.resolve(field);
+				});
+			});
+
+			modelFieldWatch.promise.then(function(field) {
+				arrayScope.$watch('model.model', function(fieldModel) {
+					scope[attrs.xvMetaformModel][field.id] = fieldModel;
+				});
+			})
 		}
 	};
 }]);

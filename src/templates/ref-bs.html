@@ -11,7 +11,7 @@
 		</div>
 		
 		<ul class="list-group">
-			<li class="list-group-item" ng-class="{'list-group-item-success': xvSelected, 'list-group-item-danger': !xvSelected}" ng-bind="xvSelected[field.display] || 'Please select:'"></li>
+			<li class="list-group-item" ng-class="{'list-group-item-success': model.model, 'list-group-item-danger': !model.model}" ng-bind="model.model[field.display] || 'Please select:'"></li>
 		</ul>
 
 		<div class="list-group" style="max-height: 170px; overflow-y:scroll; border-top: solid 1px #dddddd; border-bottom: solid 1px #dddddd; border-radius: 3px;">
