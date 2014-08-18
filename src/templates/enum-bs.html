@@ -1,6 +1,13 @@
-<div class="radio">
-	<label>
-		<input type="radio" id="{{value}}" value="{{value}}" data-ng-model="model['{{id}}']">
-		{{value}}
-	</label>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{field.label}}</h3>
+	</div>
+	<div class="panel-body">
+		<div class="radio" data-ng-repeat="choice in field.choices">
+			<label>
+				<input type="radio" id="{{choice}}" value="{{choice}}" xv-model>
+				{{choice}}
+			</label>
+		</div>
+	</div>
 </div>

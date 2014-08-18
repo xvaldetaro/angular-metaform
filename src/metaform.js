@@ -1,5 +1,14 @@
 'use strict';
 
+
+var getDefault = function(field) {
+	if(field.defaultModel) return field.defaultModel;
+
+	if(field.type == 'text') return '';
+	if(field.type == 'bool') return false;
+	if(field.type == 'enum') return field.choices[0];
+};
+
 angular.module('xvMetaform', [])
 .provider('xvFieldGen', function() {
 	this.defaultTemplateSuffix = '-bs.xv';
@@ -19,23 +28,16 @@ angular.module('xvMetaform', [])
 	return {
 		priority: 1000,
 		terminal: true,
-		scope: { formGrid: '=xvMetaformGrid', model: '=xvMetaformModel' },
-		controller: ['$scope', function($scope) {
-			this.getFormOnGrid = function(row, col) {
-				return $scope.formGrid[parseInt(row)][parseInt(col)].fields;
-			};
-
-			this.model = $scope.model;
-		}],
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
 			element.addClass('container-fluid');
-			var grid = scope.formGrid;
 			var childrenScope;
 
-			scope.$watchCollection('formGrid', function(formGrid) {
+			scope.$watchCollection(attrs.xvMetaformGrid, function(grid) {
 				if(childrenScope) childrenScope.$destroy();
 
 				childrenScope = scope.$new();
+				childrenScope.model = scope.$eval(attrs.xvMetaformModel);
+				childrenScope.grid = grid;
 
 				element.empty();
 
@@ -51,8 +53,9 @@ angular.module('xvMetaform', [])
 						var col = row[j];
 						if(!col.fields || !col.fields.length) throw new Error('Invalid col');
 
-						rowElement.append(angular.element('<div xv-metaform class="col-xs-12 col-md-'+col.size+
-							'" xv-col="'+j+'" xv-row="'+i+'"></div>'));
+						rowElement.append(angular.element('<div xv-metaform="grid['+i+']['+j+
+							'].fields" xv-metaform-model="model" class="col-xs-12 col-md-'+col.size+
+							'></div>'));
 					}
 				}
 				$compile(element.contents())(childrenScope);
@@ -62,25 +65,15 @@ angular.module('xvMetaform', [])
 }])
 .directive('xvMetaform', ['$compile', 'xvFieldGen', function($compile, fgen) {
 	return {
-		restrict: 'AE',
-		require: '^?xvMetaformGrid',
-		scope: { xvMetaform: '=', xvMetaformModel: '=xvMetaformModel', col: '@xvCol', row: '@xvRow' },
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
 			var childrenScope;
 
-			// Get the variables either from a parent xvMetaformGrid or from the view ctrl
-			scope.form = scope.xvMetaform;
-			scope.model = scope.xvMetaformModel;
-			if(ctrl) {
-				scope.form = ctrl.getFormOnGrid(scope.row, scope.col);
-				scope.model = ctrl.model;
-			}
-
-			scope.$watchCollection('form', function(fields) {
+			scope.$watchCollection(attrs.xvMetaform, function(fields) {
 				if(childrenScope) childrenScope.$destroy();
 
 				childrenScope = scope.$new();
-
+				childrenScope.fields = fields;
+				childrenScope.model = scope.$eval(attrs.xvMetaformModel);
 				element.empty();
 
 				for(var i = 0; i < fields.length; i++) {
@@ -101,58 +94,55 @@ angular.module('xvMetaform', [])
 					// Appends a new container element with the directive associated
 					element.append(
 						angular.element('<div></div>')
-						.attr('xv-'+directiveType+'-field', i)
+						.attr('xv-field', 'fields['+i+']')
+						.attr('xv-metaform-model', 'model')
 					);
 				}
-
 				$compile(element.contents())(childrenScope);
 			});
 		}
 	};
 }])
-.directive('xvTextField', ['$compile','xvFieldGen', function($compile, fgen) {
+.directive('xvField', ['$compile','$templateCache', function($compile, $templateCache) {
 	return {
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			var index = attrs.xvTextField;
-			var field = scope.form[index];
+			var childrenScope;
+			var model = scope.$eval(attrs.xvMetaformModel);
 
-			var newElement = angular.element(fgen.mix(field.templatePrefix, field));
-			element.replaceWith(newElement);
-			$compile(newElement)(scope);
+			scope.$watchCollection(attrs.xvField, function(field) {
+				if(childrenScope) childrenScope.$destroy();
+
+				childrenScope = scope.$new();
+				childrenScope.field = field;
+				childrenScope.model = scope.$eval(attrs.xvMetaformModel);
+				if(!childrenScope.model[field.id])
+					childrenScope.model[field.id] = getDefault(field);
+
+				childrenScope.xvSelect = function(item) {
+					childrenScope.model[field.id] = item;
+				};
+
+				childrenScope.$watch('model[\''+field.id+'\']', function(selected) {
+					scope.xvSelected = selected;
+				});
+
+				element.empty();
+
+				var newElement = angular.element($templateCache.get(field.type+'-bs.xv'));
+				element.replaceWith(newElement);
+				$compile(newElement)(childrenScope);
+			});
 		}
 	};
 }])
-.directive('xvBoolField', ['$compile','xvFieldGen', function($compile, fgen) {
+.directive('xvModel', ['$compile', function($compile) {
 	return {
-		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			var index = attrs.xvBoolField;
-			var field = scope.form[index];
-			
-			if(!scope.model[field.id]) {
-				scope.model[field.id] = field.defaultModel || false;
-			}
-			element.append(fgen.mix(field.templatePrefix, field));
-			$compile(element.contents())(scope);
-		}
-	};
-}])
-.directive('xvEnumField', ['$compile','xvFieldGen', function($compile, fgen) {
-	return {
-		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			var index = attrs.xvEnumField;
-			var field = scope.form[index];
-			var choices = field.choices;
-			
-			if(!scope.model[field.id]) {
-				scope.model[field.id] = field.defaultModel || choices[0];
-			}
-
-			var context = angular.extend({}, field);			
-			for(var i = 0; i < choices.length; i++) {
-				context.value = choices[i];
-				element.append(fgen.mix(field.templatePrefix, context));
-			}
-			$compile(element.contents())(scope);
+		priority: 1000,
+		terminal: true,
+		link: function(scope, element, attrs) {
+			element.removeAttr('xv-model');
+			element.attr('data-ng-model', 'model[\''+scope.field.id+'\']');
+			$compile(element)(scope);
 		}
 	};
 }]);

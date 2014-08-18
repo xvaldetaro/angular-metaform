@@ -9,7 +9,20 @@ function($scope) {
 		{ id: 'Color', type: 'text', subType: 'color' },
 		{ id: 'Date', type: 'text', subType: 'date' },
 		{ id: 'My Boolean', type: 'bool' },
-		{ id: 'My Enum', type: 'enum', choices: ['Opt1', 'Opt2', 'AnotherOpt']}
+		{ id: 'My Enum', type: 'enum', choices: ['Opt1', 'Opt2', 'AnotherOpt']},
+		{
+			id: 'Friend',
+			type: 'ref',
+			select: '_id',
+			display: 'name',
+			list: [
+				{ _id: '1', name: 'Jose'},
+				{ _id: '2', name: 'Alex'},
+				{ _id: '3', name: 'Aegon'},
+				{ _id: '4', name: 'Jurema'},
+				{ _id: '5', name: 'Pele'}
+			] 
+		}
 	];
 	$scope.grid1 = [
 		[ // row 1
