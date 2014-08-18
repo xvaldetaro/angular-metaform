@@ -11,14 +11,14 @@
   <body>
     <div class="container" ng-app="sample" ng-cloak>
       <div ng-controller="SampleCtrl" class="container">
-        
+
     <button class="btn btn-primary" type="button" ng-click="newModel()">New model</button>
     <button class="btn btn-primary" type="button" ng-click="newName()">New name model</button>
         <h3>Form without grid</h3>
         <div class="row">
           <div class="col-md-3">Form Model: {{model}}</div>
           <div class="col-md-9">
-            <div xv-metaform="form1" xv-metaform-model="model"></div>
+            <div class="container-fluid" xv-metaform="form1" xv-metaform-model="model"></div>
           </div>
         </div>
         <hr><hr>

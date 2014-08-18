@@ -2,7 +2,7 @@ angular.module('xvMetaform').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('array-bs.xv',
-    "<div class=\"panel panel-default\"><div class=panel-heading><h3 class=panel-title>{{field.label}}</h3></div><div class=panel-body><div class=\"panel panel-default\"><div class=panel-body><xvnew></xvnew><hr><button class=\"btn btn-success\" type=button ng-click=add()>Add</button></div></div><ul class=list-group><li class=list-group-item ng-repeat=\"item in model.model\">{{item | json}}</li></ul></div></div>"
+    "<div class=\"panel panel-default\" ng-init=\"collapse = false\"><div class=panel-heading ng-click=\"collapse = !collapse\" style=\"cursor: pointer\"><h3 class=panel-title><a>{{field.label}}</a></h3></div><div class=panel-body ng-show=collapse><div class=\"panel panel-default\"><div class=panel-body><xvnew></xvnew><hr><button class=\"btn btn-success\" type=button ng-click=add()>Add {{field.label}}</button></div></div><ul class=list-group><li class=list-group-item ng-repeat=\"item in model.model\">{{item | json}}</li></ul></div></div>"
   );
 
 
@@ -13,6 +13,21 @@ angular.module('xvMetaform').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('enum-bs.xv',
     "<div class=\"panel panel-default\"><div class=panel-heading><h3 class=panel-title>{{field.label}}</h3></div><div class=panel-body><div class=radio data-ng-repeat=\"choice in field.choices\"><label><input type=radio id={{choice}} value={{choice}} ng-model=model.model> {{choice}}</label></div></div></div>"
+  );
+
+
+  $templateCache.put('fieldWrapper-bs.xv',
+    "<div class=\"col-xs-12 col-md-{{field.colspan}}\"></div>"
+  );
+
+
+  $templateCache.put('metaformWrapper-bs.xv',
+    "<div class=row></div>"
+  );
+
+
+  $templateCache.put('object-bs.xv',
+    "<div class=\"panel panel-default\" ng-init=\"collapse = false\"><div class=panel-heading ng-click=\"collapse = !collapse\" style=\"cursor: pointer\"><h3 class=panel-title><a>{{field.label}}</a></h3></div><div class=panel-body ng-show=collapse><xvnew></xvnew></div></div>"
   );
 
 

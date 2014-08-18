@@ -25,13 +25,13 @@ function($scope) {
 		// }
 		{
 			id: 'Items',
-			array: 'object',
+			nested: 'objectArray',
 			type: [
 				{ id: 'Name', type: 'text', placeholder: 'Your Name' },
 				{ id: 'owner', type: 'text' },
 				{
 					id: 'Feats',
-					array: true,
+					nested: 'array',
 					type: 'ref',
 					display: 'name',
 					list: [
@@ -41,6 +41,16 @@ function($scope) {
 						{ _id: '4', name: 'Jurema'},
 						{ _id: '5', name: 'Pele'}
 					] 
+				},
+				{
+					id: 'Attributes',
+					nested: 'object',
+					colspan: 3,
+					type: [
+						{ id: 'STR', type: 'text', subType: 'number' },
+						{ id: 'DEX', type: 'text', subType: 'number' },
+						{ id: 'CON', type: 'text', subType: 'number' }
+					]
 				}
 			]
 		}
