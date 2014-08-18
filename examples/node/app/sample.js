@@ -54,6 +54,31 @@ function($scope) {
 				}
 			]
 		}
+		// {
+		// 	id: 'Languages',
+		// 	array: true,
+		// 	type: 'text'
+		// },{
+		// 	id: 'Feats',
+		// 	array: true,
+		// 	type: 'ref',
+		// 	display: 'name',
+		// 	list: [
+		// 		{ _id: '1', name: 'Jose'},
+		// 		{ _id: '2', name: 'Alex'},
+		// 		{ _id: '3', name: 'Aegon'},
+		// 		{ _id: '4', name: 'Jurema'},
+		// 		{ _id: '5', name: 'Pele'}
+		// 	] 
+		// },
+		// {
+		// 	id: 'Items',
+		// 	array: 'object',
+		// 	type: [
+		// 		{ id: 'Name', type: 'text', placeholder: 'Your Name' },
+		// 		{ id: 'Email', type: 'text', subType: 'email' }
+		// 	]
+		// }
 	];
 	$scope.newModel = function() {
 		$scope.model = {};
