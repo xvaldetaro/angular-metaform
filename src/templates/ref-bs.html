@@ -5,8 +5,8 @@
 	<div class="panel-body">
 
 		<div class="form-group has-feedback">
-			<label class="control-label sr-only" for="search{{field.id}}">search{{field.id}}</label>
-			<input type="text" class="form-control" id="search{{field.id}}" ng-model="searchText">
+			<label class="control-label sr-only" for="search{{field._xvKey}}">search{{field._xvKey}}</label>
+			<input type="text" class="form-control" _xvKey="search{{field._xvKey}}" ng-model="searchText">
 			<span class="glyphicon glyphicon-search form-control-feedback"></span>
 		</div>
 		
@@ -14,7 +14,7 @@
 			<li class="list-group-item" ng-class="{'list-group-item-success': model.model, 'list-group-item-danger': !model.model}" ng-bind="model.model[field.display] || 'Please select:'"></li>
 		</ul>
 
-		<div class="list-group" style="max-height: 170px; overflow-y:scroll; border-top: solid 1px #dddddd; border-bottom: solid 1px #dddddd; border-radius: 3px;">
+		<div class="list-group" style="max-height: 170px; overflow-y:scroll; border-top: sol_xvKey 1px #dddddd; border-bottom: sol_xvKey 1px #dddddd; border-radius: 3px;">
 
 			<a class="list-group-item" ng-repeat="item in field.list | filter:searchText" ng-click="model.model = item" ng-class="{active: item === model.model}">{{item[field.display]}}</a>
 

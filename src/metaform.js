@@ -11,33 +11,33 @@ var getDefault = function(field) {
 };
 
 angular.module('xvMetaform', [])
-.directive('xvMetaformGrid', ['$compile', function($compile) {
+.directive('xvMetaformGr_xvKey', ['$compile', function($compile) {
 	return {
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			element.addClass('container-fluid');
+			element.addClass('container-flu_xvKey');
 			var childrenScope;
 
-			scope.$watchCollection(attrs.xvMetaformGrid, function(grid) {
+			scope.$watchCollection(attrs.xvMetaformGr_xvKey, function(gr_xvKey) {
 				if(childrenScope) childrenScope.$destroy();
 
 				childrenScope = scope.$new();
-				childrenScope.grid = grid;
+				childrenScope.gr_xvKey = gr_xvKey;
 
 				element.empty();
 
-				for (var i = 0; i < grid.length; i++) {
-					var row = grid[i];
+				for (var i = 0; i < gr_xvKey.length; i++) {
+					var row = gr_xvKey[i];
 
-					if(!row.length) throw new Error('Invalid row');
+					if(!row.length) throw new Error('Inval_xvKey row');
 
 					var rowElement = angular.element('<div class="row"></div>');
 					element.append(rowElement);
 
 					for (var j = 0; j < row.length; j++) {
 						var col = row[j];
-						if(!col.fields || !col.fields.length) throw new Error('Invalid col');
+						if(!col.fields || !col.fields.length) throw new Error('Inval_xvKey col');
 
-						rowElement.append(angular.element('<div xv-metaform="grid['+i+']['+j+
+						rowElement.append(angular.element('<div xv-metaform="gr_xvKey['+i+']['+j+
 							'].fields" xv-metaform-model="'+attrs.xvMetaformModel+
 							'" class="col-xs-12 col-md-'+col.size+
 							'"></div>'));
@@ -69,14 +69,14 @@ angular.module('xvMetaform', [])
 				for(var i = 0; i < fields.length; i++) {
 					var field = fields[i];
 
-					if(typeof(field) !== 'object' || !field.id || !field.type)
-						throw new Error('xvMetaform fields must be objects with ids and types');
+					if(typeof(field) !== 'object' || !field._xvKey || !field.type)
+						throw new Error('xvMetaform fields must be objects with _xvKeys and types');
 
 					// Sets defaults
 					field.template = field.template || field.type + '-bs.xv';
 					field.subType = field.subType || field.type;
 					field.placeholder = field.placeholder || field.label;
-					field.label = field.label || field.id;
+					field.label = field.label || field._xvKey;
 					field.colspan = field.colspan || 12;
 
 					// Appends a new container element with the directive associated
@@ -125,7 +125,7 @@ angular.module('xvMetaform', [])
 						fieldScope.newField.label = 'Add new '+fieldScope.newField.label;
 
 						fieldScope.add = function() {
-							fieldScope.model.model.push(angular.extend({}, fieldScope.newModel[field.id]));
+							fieldScope.model.model.push(angular.extend({}, fieldScope.newModel[field._xvKey]));
 							fieldScope.newModel = {};
 						};
 
@@ -169,8 +169,8 @@ angular.module('xvMetaform', [])
 			var modelWatch = $q.defer();
 			fieldWatch.promise.then(function(field){
 				scope.$watch(attrs.xvMetaformModel, function(model) {
-					if(!model[field.id])
-						model[field.id] = getDefault(field);
+					if(!model[field._xvKey])
+						model[field._xvKey] = getDefault(field);
 
 					modelWatch.resolve(field);
 				});
@@ -178,7 +178,7 @@ angular.module('xvMetaform', [])
 
 			var modelFieldWatch = $q.defer();
 			modelWatch.promise.then(function(field) {
-				scope.$watch(attrs.xvMetaformModel+'[\''+field.id+'\']', function(modelField) {
+				scope.$watch(attrs.xvMetaformModel+'[\''+field._xvKey+'\']', function(modelField) {
 					fieldScope.model.model = modelField;
 					modelFieldWatch.resolve(field);
 				});
@@ -186,7 +186,7 @@ angular.module('xvMetaform', [])
 
 			modelFieldWatch.promise.then(function(field) {
 				fieldScope.$watch('model.model', function(fieldModel) {
-					scope[attrs.xvMetaformModel][field.id] = fieldModel;
+					scope[attrs.xvMetaformModel][field._xvKey] = fieldModel;
 				});
 			});
 		}
