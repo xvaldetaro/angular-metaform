@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf8">
+    <title>
+      Sample app with angular
+    </title>
+    <link href="bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="styles.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="container" ng-app="sample" ng-cloak>
+      <div ng-controller="SampleCtrl" class="container">
+        
+    <button class="btn btn-primary" type="button" ng-click="newModel()">New model</button>
+        <div class="row">
+          <div class="col-md-3">Form Model: {{model | json}}</div>
+          <div class="col-md-9">
+            <div class="container-fluid" xv-metaform="form1" xv-metaform-model="model"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+    <script src="angular.js" type="text/javascript"></script>
+    <script src="metaform.js" type="text/javascript"></script>
+    <script src="sample.js" type="text/javascript"></script>
+  </body>
+</html>
