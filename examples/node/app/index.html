@@ -11,6 +11,9 @@
   <body>
     <div class="container" ng-app="sample" ng-cloak>
       <div ng-controller="SampleCtrl" class="container">
+        
+    <button class="btn btn-primary" type="button" ng-click="newModel()">New model</button>
+    <button class="btn btn-primary" type="button" ng-click="newName()">New name model</button>
         <h3>Form without grid</h3>
         <div class="row">
           <div class="col-md-3">Form Model: {{model}}</div>
@@ -19,13 +22,13 @@
           </div>
         </div>
         <hr><hr>
-        <h3>Form with grid</h3>
+        <!-- <h3>Form with grid</h3>
         <div class="row">
           <div class="col-md-3">Grid Model: {{modelGrid}}</div>
           <div class="col-md-9">
             <div xv-metaform-grid="grid1" xv-metaform-model="modelGrid"></div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <script src="bower_components/angular/angular.js" type="text/javascript"></script>

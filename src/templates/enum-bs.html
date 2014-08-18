@@ -5,7 +5,7 @@
 	<div class="panel-body">
 		<div class="radio" data-ng-repeat="choice in field.choices">
 			<label>
-				<input type="radio" id="{{choice}}" value="{{choice}}" xv-model>
+				<input type="radio" id="{{choice}}" value="{{choice}}" ng-model="model.model">
 				{{choice}}
 			</label>
 		</div>
