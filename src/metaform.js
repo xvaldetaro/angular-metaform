@@ -55,7 +55,7 @@ angular.module('xvMetaform', [])
 
 						rowElement.append(angular.element('<div xv-metaform="grid['+i+']['+j+
 							'].fields" xv-metaform-model="model" class="col-xs-12 col-md-'+col.size+
-							'></div>'));
+							'"></div>'));
 					}
 				}
 				$compile(element.contents())(childrenScope);
