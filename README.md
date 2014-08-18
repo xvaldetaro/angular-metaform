@@ -1,7 +1,7 @@
 Angular Metaform
 =================
 
-This project provides a directive that generates forms based on **data description** and not view description. Usually, directives that generate forms dynamically are based on view description, i.e. an array of html input fields described in JSON. Conversely, Angular-metaform has an approach similar to a mongoose model, where the JSON describes an actual data document.
+This project provides a directive that generates forms based on **data description** and not view description. Usually, directives that generate forms dynamically are based on view description, i.e. an array of html input fields described in JSON. Conversely, Angular-metaform has an approach similar to a mongoose model, where the JSON describes an actual data document. [Checkout the live example](http://xvaldetaro.github.io/angular-metaform)
 
 The supporting data types are: 
 
