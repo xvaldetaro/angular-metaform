@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 		watch: {
 			jsFiles: {
 				files: ['*.js','app/*.js','../../src/*.js'],
-				tasks: ['jshint'],
+				tasks: ['jshint', 'grunt'],
 				options: {
 					livereload: true
 				}
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 			},
 			formTemplates: {
 				files: ['../../src/templates/*.html'],
-				tasks: ['ngtemplates'],
+				tasks: ['ngtemplates', 'grunt'],
 				options: {
 					livereload: true
 				}
@@ -99,6 +99,12 @@ module.exports = function(grunt) {
 				logConcurrentOutput: true,
 				limit: 3
 			}
+		},
+		grunt: {
+			build: {
+				gruntfile: '../../Gruntfile.js',
+				task: 'build'
+			}
 		}
 	});
 
@@ -113,4 +119,6 @@ module.exports = function(grunt) {
 
 	// Lint task(s).
 	grunt.registerTask('lint', ['jshint', 'csslint']);
+
+	grunt.registerTask('rebuild', ['default', 'grunt']);
 };

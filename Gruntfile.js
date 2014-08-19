@@ -54,5 +54,6 @@ module.exports = function(grunt) {
 	require('load-grunt-tasks')(grunt);
 
 	// Default task(s).
-	grunt.registerTask('default', ['jshint', 'ngtemplates', 'concat', 'uglify']);
+	grunt.registerTask('default', ['jshint', 'build']);
+	grunt.registerTask('build', ['ngtemplates', 'concat', 'uglify']);
 };
