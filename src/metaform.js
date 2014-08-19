@@ -11,43 +11,6 @@ var getDefault = function(field) {
 };
 
 angular.module('xvMetaform', [])
-.directive('xvMetaformGr_xvKey', ['$compile', function($compile) {
-	return {
-		link: function(scope, element, attrs, ctrl, transcludeFn) {
-			element.addClass('container-flu_xvKey');
-			var childrenScope;
-
-			scope.$watchCollection(attrs.xvMetaformGr_xvKey, function(gr_xvKey) {
-				if(childrenScope) childrenScope.$destroy();
-
-				childrenScope = scope.$new();
-				childrenScope.gr_xvKey = gr_xvKey;
-
-				element.empty();
-
-				for (var i = 0; i < gr_xvKey.length; i++) {
-					var row = gr_xvKey[i];
-
-					if(!row.length) throw new Error('Inval_xvKey row');
-
-					var rowElement = angular.element('<div class="row"></div>');
-					element.append(rowElement);
-
-					for (var j = 0; j < row.length; j++) {
-						var col = row[j];
-						if(!col.fields || !col.fields.length) throw new Error('Inval_xvKey col');
-
-						rowElement.append(angular.element('<div xv-metaform="gr_xvKey['+i+']['+j+
-							'].fields" xv-metaform-model="'+attrs.xvMetaformModel+
-							'" class="col-xs-12 col-md-'+col.size+
-							'"></div>'));
-					}
-				}
-				$compile(element.contents())(childrenScope);
-			});
-		}
-	};
-}])
 .directive('xvMetaform', ['$compile', '$templateCache', function($compile, $templateCache) {
 	return {
 		replace: true,
