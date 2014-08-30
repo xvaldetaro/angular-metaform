@@ -1,1 +1,10 @@
-<div class="row"></div>
+<div class="panel panel-default" ng-init="collapse = true">
+	<div class="panel-heading" ng-click="collapse = !collapse" style="cursor: pointer;">
+		<h3 class="panel-title"><a>{{name}}</a></h3>
+	</div>
+	<div class="panel-body" ng-show="collapse">
+		<div class="row">
+			<xvnew></xvnew>
+		</div>
+	</div>
+</div>

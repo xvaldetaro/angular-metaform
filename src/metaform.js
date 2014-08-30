@@ -11,24 +11,42 @@ var getDefault = function(field) {
 };
 
 angular.module('xvMetaform', [])
+/* 
+	Appends a new element with a xv-field directive for every field in the form and $compiles
+*/
 .directive('xvMetaform', ['$compile', '$templateCache', function($compile, $templateCache) {
 	return {
 		replace: true,
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
 			var childrenScope;
+			// Use the template with the <xvnew> slot instead of current element
 			var properElement = angular.element($templateCache.get('metaformWrapper-bs.xv'));
 			element.replaceWith(properElement);
 
+			// Replace <xvnew> with a slot element
+			var placeholderElement = properElement.find('xvnew');
+			var slotElement = angular.element('<div></div>');
+			placeholderElement.replaceWith(slotElement);
+
+			// If the form description changes, all the sub DOM and xvFields must be recreated
 			scope.$watchCollection(attrs.xvMetaform, function(fields) {
 				if(childrenScope) childrenScope.$destroy();
 
 				childrenScope = scope.$new();
 				childrenScope.fields = fields;
+
+				// An optional name
+				childrenScope.name = attrs.xvMetaformName || attrs.xvMetaform;
+
+				// Model binding, in case model variable changes, need to reassign
 				scope.$watch(attrs.xvMetaformModel, function(model) {
 					childrenScope.model = model;
 				});
-				properElement.empty();
 
+				// Clears the slot element
+				slotElement.empty();
+
+				// Appends a dummy <div> for every field, which will replace it with proper template
 				for(var i = 0; i < fields.length; i++) {
 					var field = fields[i];
 
@@ -43,7 +61,7 @@ angular.module('xvMetaform', [])
 					field.colspan = field.colspan || 12;
 
 					// Appends a new container element with the directive associated
-					properElement.append(
+					slotElement.append(
 						angular.element('<div></div>')
 						.attr('xv-field', 'fields['+i+']')
 						.attr('xv-metaform-model', 'model')
@@ -54,16 +72,16 @@ angular.module('xvMetaform', [])
 		}
 	};
 }])
+// Recursive directive. Can keep appending and $compiling for nested objects
 .directive('xvField', ['$compile','$templateCache', '$q', function($compile, $templateCache, $q) {
 	return {
-		templateUrl: 'fieldWrapper-bs.xv',
-		replace: true,
 		link: function(scope, element, attrs, ctrl, transcludeFn) {
 			var fieldScope;
 
 			var properElement = angular.element($templateCache.get('fieldWrapper-bs.xv'));
 			element.replaceWith(properElement);
 
+			// Flux control. Watch the fields array, then watch the field property in the array
 			var fieldWatch = $q.defer();
 			scope.$watchCollection(attrs.xvField, function(field) {
 				if(fieldScope) fieldScope.$destroy();
